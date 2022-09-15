@@ -16,23 +16,11 @@ function NowPlaying() {
             //set full list of movies as master list which can be filtered thru and display a subset
             setMovies(data.nowPlaying);
             // setFilteredMovies(data.nowPlaying);
-            console.log("Got live data", data.nowPlaying);
-            // localStorage.setItem(LS_PREFIX+'movies', JSON.stringify(data.nowPlaying));
             // setBadge(data.nowPlaying.length);
         },
         onError: (err) => {
-            // const cachedNowPlaying = localStorage.getItem(LS_PREFIX+'movies');
-            // if (cachedNowPlaying) {
-            // const data = JSON.parse(cachedNowPlaying);
-            // console.log("Got cached results...", data);
-            // setMovies(data);
-            // setFilteredMovies(data);
-            // setBadge(data.length);
-            // } else {
-            console.log("No results from api, no data in cache, show error");
-            setError("An error occurred getting movies. " + err);
+            setError("An error occurred querying movies: " + err);
             // setSearchDisabled(true);	//disable search if no movies are returned
-            // }
         }
     });
 

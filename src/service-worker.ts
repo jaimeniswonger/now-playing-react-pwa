@@ -13,6 +13,8 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import md5 from 'crypto-js/md5';
+import { createStore, get, set, UseStore } from 'idb-keyval';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -78,3 +80,82 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+self.addEventListener('fetch', async (event) => {
+  if (event.request.method === 'POST') {
+    // Respond with cached data and update from network in the background.
+    event.respondWith(staleWhileRevalidate(event));
+  }
+});
+
+async function staleWhileRevalidate(event: FetchEvent): Promise<Response> {
+  const cachedResponse = await getCachedResponse(event.request.clone());
+
+  if (cachedResponse) {
+    return Promise.resolve(cachedResponse);
+  } else {
+    const fetchPromise: any = fetch(event.request.clone())
+      .then((response) => {
+        setCachedResponse(event.request.clone(), response.clone());
+        return response;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    return fetchPromise;
+  }
+}
+
+const store: UseStore = createStore('GraphQL-Cache', 'PostResponses');
+
+async function setCachedResponse(request: Request, response: Response) {
+  let body = await request.json();
+  let id = md5(JSON.stringify(body)).toString();
+
+  var entry = {
+    query: body.query,
+    response: await serializeResponse(response),
+    timestamp: Date.now()
+  };
+  set(id, entry, store);
+}
+
+async function getCachedResponse(request: Request) {
+  let data;
+  try {
+    let body = await request.json();
+    let id = md5(JSON.stringify(body)).toString();
+    data = await get(id, store);
+    if (!data) {
+      console.log("Cache miss: ", id);
+      return null;
+    }
+
+    // Check cache max age.
+    let cacheControl = request.headers.get('Cache-Control');
+    let maxAge = cacheControl ? parseInt(cacheControl.split('=')[1]) : 3600;
+    if (Date.now() - data.timestamp > maxAge * 1000) {
+      console.log(`Cache expired. Load from API endpoint.`);
+      return null;
+    }
+
+    console.log("Cache hit:", id, data);
+    return new Response(JSON.stringify(data.response.body), data.response);
+  } catch (err) {
+    return null;
+  }
+}
+
+async function serializeResponse(response: Response) {
+  let serializedHeaders: any = {};
+  // for (var entry of response.headers.entries()) {
+  //   serializedHeaders[entry[0]] = entry[1];
+  // }
+  let serialized = {
+    body: undefined,
+    headers: serializedHeaders,
+    status: response.status,
+    statusText: response.statusText
+  };
+  serialized.body = await response.json();
+  return serialized;
+}

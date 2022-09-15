@@ -71,6 +71,21 @@ registerRoute(
   })
 );
 
+// An example runtime caching route for requests for images not from the url origin
+registerRoute(
+  // "https://image.tmdb.org/t/p/w500/iRV0IB5xQeOymuGGUBarTecQVAl.jpg"
+  ({ url }) => url.origin.includes("image.tmdb.org") && url.pathname.endsWith('.jpg'),
+  // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  new StaleWhileRevalidate({
+    cacheName: 'movie-images',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
@@ -79,7 +94,7 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+// An example of caching GraphQL POST calls
 self.addEventListener('fetch', async (event) => {
   if (event.request.method === 'POST') {
     // Respond with cached data and update from network in the background.
@@ -88,25 +103,41 @@ self.addEventListener('fetch', async (event) => {
 });
 
 async function staleWhileRevalidate(event: FetchEvent): Promise<Response> {
-  const cachedResponse = await getCachedResponse(event.request.clone());
-
-  if (cachedResponse) {
-    return Promise.resolve(cachedResponse);
-  } else {
-    const fetchPromise: any = fetch(event.request.clone())
-      .then((response) => {
-        setCachedResponse(event.request.clone(), response.clone());
-        return response;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    return fetchPromise;
-  }
+  let cachedResponse = await getCachedResponse(event.request.clone());
+  let fetchPromise: any = fetch(event.request.clone())
+    .then((response) => {
+      setCachedResponse(event.request.clone(), response.clone());
+      return response;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  return cachedResponse ? Promise.resolve(cachedResponse) : fetchPromise;
 }
 
-const store: UseStore = createStore('GraphQL-Cache', 'PostResponses');
+// The following is a cacheFirst example
+// async function cacheFirst(event: FetchEvent): Promise<Response> {
+//   const cachedResponse = await getCachedResponse(event.request.clone());
 
+//   if (cachedResponse) {
+//     return Promise.resolve(cachedResponse);
+//   } else {
+//     const fetchPromise: any = fetch(event.request.clone())
+//       .then((response) => {
+//         setCachedResponse(event.request.clone(), response.clone());
+//         return response;
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
+//     return fetchPromise;
+//   }
+// }
+
+// The IndexedDB used by the GraphQL cache
+const store: UseStore = createStore('graphql-cache', 'post-responses');
+
+// An example adding a cache entry -- uses an MD5 hashkey of the request
 async function setCachedResponse(request: Request, response: Response) {
   let body = await request.json();
   let id = md5(JSON.stringify(body)).toString();
@@ -119,6 +150,7 @@ async function setCachedResponse(request: Request, response: Response) {
   set(id, entry, store);
 }
 
+// An example getting a cache entry -- uses an MD5 hashkey of the request
 async function getCachedResponse(request: Request) {
   let data;
   try {
@@ -130,7 +162,7 @@ async function getCachedResponse(request: Request) {
       return null;
     }
 
-    // Check cache max age.
+    // Check cache max age - if reached max, then it is a cache miss
     let cacheControl = request.headers.get('Cache-Control');
     let maxAge = cacheControl ? parseInt(cacheControl.split('=')[1]) : 3600;
     if (Date.now() - data.timestamp > maxAge * 1000) {
@@ -145,11 +177,12 @@ async function getCachedResponse(request: Request) {
   }
 }
 
+// Serialize the response for storage in the cache
 async function serializeResponse(response: Response) {
   let serializedHeaders: any = {};
-  // for (var entry of response.headers.entries()) {
-  //   serializedHeaders[entry[0]] = entry[1];
-  // }
+  for (var entry of response.headers.entries()) {
+    serializedHeaders[entry[0]] = entry[1];
+  }
   let serialized = {
     body: undefined,
     headers: serializedHeaders,

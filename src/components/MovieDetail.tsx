@@ -32,7 +32,9 @@ function MovieDetail() {
             <div>{movie?.id}</div>
             <div>{movie?.title}</div>
             <div>{movie?.overview}</div>
+            <div>{movie?.voteAverage}</div>
             <img src={movie?.posterPath} alt="{movie?.title}" />
+            <img src={movie?.backdropPathW1280} alt="{movie?.title}" />
         </>
     );
 }

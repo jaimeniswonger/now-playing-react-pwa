@@ -6,6 +6,7 @@ export const NOW_PLAYING = gql`
 			id,
 			title,
 			posterPath
+			voteAverage
 		}
 	}
 `;
@@ -16,7 +17,9 @@ export const MOVIE_DETAIL = gql`
 	    id
 	    title
 	    overview
-	    posterPath,
+	    posterPath
+		backdropPathW1280
+		voteAverage
 	  }
 	}
 `;

@@ -73,7 +73,7 @@ registerRoute(
 
 // An example runtime caching route for requests for images not from the url origin
 registerRoute(
-  // "https://image.tmdb.org/t/p/w500/iRV0IB5xQeOymuGGUBarTecQVAl.jpg"
+  // Example URL: https://image.tmdb.org/t/p/w500/iRV0IB5xQeOymuGGUBarTecQVAl.jpg
   ({ url }) => url.origin.includes("image.tmdb.org") && url.pathname.endsWith('.jpg'),
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
@@ -89,7 +89,9 @@ registerRoute(
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
+  console.log("Message Event caught", event);
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log('skip waiting event caught');
     self.skipWaiting();
   }
 });

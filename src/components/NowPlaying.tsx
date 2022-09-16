@@ -1,9 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { NOW_PLAYING } from '../graphql/queries';
 import { Movie } from '../model';
 import MovieList from './MovieList';
 import './NowPlaying.css';
+import UpdateRefreshToast from './UpdateRefreshToast';
 
 function NowPlaying() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -27,9 +29,14 @@ function NowPlaying() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error : {error}</p>;
 
+    // const notify = () => toast(UpdateRefreshToast, {
+    //     autoClose: false
+    // });
+
     return (
         <>
             <h3>Now Playing</h3>
+            {/* <button onClick={notify}>Notify!</button> */}
             <MovieList movies={movies} />
         </>
     );

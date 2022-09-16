@@ -1,9 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import MovieDetail from './components/MovieDetail';
 
-import './App.css';
 import Login from './components/Login';
 import NowPlaying from './components/NowPlaying';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 function App() {
 
@@ -26,6 +29,7 @@ function App() {
         <Route path="/nowPlaying" element={<NowPlaying />} />
         <Route path="/movies/:id" element={<MovieDetail />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }

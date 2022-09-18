@@ -164,8 +164,8 @@ async function getCachedResponse(request: Request) {
 
     // Check cache max age - if reached max, then it is a cache miss
     let cacheControl = request.headers.get('Cache-Control');
-    let maxAge = cacheControl ? parseInt(cacheControl.split('=')[1]) : 3600;
-    if (Date.now() - data.timestamp > maxAge * 1000) {
+    let maxAge = cacheControl ? parseInt(cacheControl.split('=')[1]) : undefined;
+    if (maxAge && (Date.now() - data.timestamp > maxAge * 1000)) {
       console.log(`Cache expired. Load from API endpoint.`);
       return null;
     }

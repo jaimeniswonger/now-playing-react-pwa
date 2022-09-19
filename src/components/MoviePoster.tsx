@@ -3,11 +3,15 @@ import { Movie } from '../model';
 
 import './MoviePoster.css';
 
-function MoviePoster(props: { movie: Movie }) {
+interface MoviePosterProps {
+    movie: Movie
+}
+
+function MoviePoster({ movie }: MoviePosterProps) {
 
     return (
-        <Link to={`/movies/${props.movie.id}`}>
-            <h3>Movie Poster for {props.movie.id}</h3>
+        <Link to={`/movies/${movie.id}`} className="movie-poster">
+            <img src={movie.posterPath} alt={movie.title} />
         </Link>
     );
 }

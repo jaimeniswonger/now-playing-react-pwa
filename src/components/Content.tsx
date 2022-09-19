@@ -2,6 +2,7 @@
 import { ToastContainer } from 'react-toastify';
 import Routing from './Routing';
 
+import './Toast.css';
 import './Content.css';
 
 const Content = () => {

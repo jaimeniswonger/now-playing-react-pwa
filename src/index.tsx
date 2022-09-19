@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from './graphql/apollo-client';
 import serviceWorkerConfig from './serviceWorkerConfig';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

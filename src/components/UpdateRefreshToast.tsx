@@ -1,8 +1,7 @@
-
 function UpdateRefreshToast() {
     return (
         <>
-            <span>A new version is available; please refresh.</span><button onClick={() => window.location.reload()}>REFRESH</button>
+            <span>A new version is available.</span><button className="toast-button" onClick={() => window.location.reload()}>REFRESH</button>
         </>
     );
 }

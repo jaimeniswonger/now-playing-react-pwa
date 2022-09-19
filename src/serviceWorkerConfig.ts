@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import UpdateRefreshToast from "./components/UpdateRefreshToast";
+import { UpdateRefreshToast } from "./components/Toast";
 
 const serviceWorkerConfig = {
     onUpdate: (registration: ServiceWorkerRegistration) => {

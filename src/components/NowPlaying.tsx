@@ -6,6 +6,9 @@ import MovieList from './MovieList';
 
 import './NowPlaying.css';
 
+// import { toast } from 'react-toastify';
+// import {UpdateRefreshToast} from './Toast';
+
 function NowPlaying() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [error, setError] = useState<string | undefined>();
@@ -19,12 +22,19 @@ function NowPlaying() {
         }
     });
 
+    // const notify = () => toast.info(UpdateRefreshToast, {
+    //     autoClose: false,
+    //     progress: 5
+    // });
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error : {error}</p>;
+
 
     return (
         <>
             <h1>Now Playing</h1>
+            {/* <button onClick={notify}>Notify!</button> */}
             <MovieList movies={movies} />
         </>
     );

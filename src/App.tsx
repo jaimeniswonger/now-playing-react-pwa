@@ -1,35 +1,23 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import MovieDetail from './components/MovieDetail';
-
-import Login from './components/Login';
-import NowPlaying from './components/NowPlaying';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Body from './components/Body';
 
 function App() {
 
-  const loggedIn = true;
+  // hard coded for now
+  const isLoggedIn = true;
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            loggedIn ? (
-              <Navigate replace to="/nowPlaying" />
-            ) : (
-              <Navigate replace to="/login" />
-            )
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/nowPlaying" element={<NowPlaying />} />
-        <Route path="/movies/:id" element={<MovieDetail />} />
-      </Routes>
       <ToastContainer />
+      <Header />
+      <Body loggedIn={isLoggedIn} />
+      <Footer />
     </BrowserRouter>
   );
 }

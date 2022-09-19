@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { NOW_PLAYING } from '../graphql/queries';
 import { Movie } from '../model';
+// import { setAppBadge } from '../pwsUtilities';
 import MovieList from './MovieList';
 import './NowPlaying.css';
-import UpdateRefreshToast from './UpdateRefreshToast';
+// import UpdateRefreshToast from './UpdateRefreshToast';
 
 function NowPlaying() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -18,7 +19,7 @@ function NowPlaying() {
             //set full list of movies as master list which can be filtered thru and display a subset
             setMovies(data.nowPlaying);
             // setFilteredMovies(data.nowPlaying);
-            // setBadge(data.nowPlaying.length);
+            // setAppBadge(data.nowPlaying.length);
         },
         onError: (err) => {
             setError("An error occurred querying movies: " + err);

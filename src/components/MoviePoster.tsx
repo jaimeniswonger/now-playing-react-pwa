@@ -11,7 +11,7 @@ function MoviePoster({ movie }: MoviePosterProps) {
 
     return (
         <Link to={`/movies/${movie.id}`} className="movie-poster">
-            <img src={movie.posterPath} alt={movie.title} />
+            <img src={movie.images.posterPath} alt={movie.title} />
         </Link>
     );
 }

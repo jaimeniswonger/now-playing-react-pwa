@@ -3,9 +3,11 @@ import { gql } from '@apollo/client';
 export const NOW_PLAYING = gql`
 	query fetchNowPlaying {
 		nowPlaying {
-			id,
-			title,
-			posterPath
+			id
+			title
+			images {
+				posterPath
+			}
 			voteAverage
 		}
 	}
@@ -17,8 +19,10 @@ export const MOVIE_DETAIL = gql`
 	    id
 	    title
 	    overview
-	    posterPath
-		backdropPathW1280
+		images {
+			posterPath
+			backdropPathW1280
+		}
 		voteAverage
 	  }
 	}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now Playing - Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/cad1ddec8f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/styles.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <nav>
+        <ul class="menu">
+            <li class="logo"><a href="#"><img src="img/nowplaying-white-logo-nav.png"></a></li>
+            <li class="item"><a href="#">Home</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="#">Link</a></li>
+            <li class="item"><a href="#">Link</a></li>
+            <li class="toggle"><a href="#"><i class='fas fa-bars'></i></a></li>
+        </ul>
+    </nav>
+
+
+    <!-- BODY -->
+    <div class="wrapper">
+        <div class="title">
+            <p>Movies, TV Shows and the People Who Make Them</p>
+        </div>
+        <div class="login">
+            <form>
+                <label for="username">Username </label>
+                <input type="text" id="username" name="username"><br><br>
+                <label for="password">Password </label>
+                <input type="text" id="password" name="password">
+                <input class="loginBtn" type="submit" value="Log In">
+            </form>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footbox">
+            <p>Created by</p>
+            <img src="/img/keyhole-white.png" />
+        </div>
+        <div class="footbox">
+            <p>Powered by</p>
+            <img src="/img/movie-db-logo.png" />
+        </div>
+    </div>
+
+    <!-- NAVIGATION JS -->
+    <script>
+        const toggle = document.querySelector(".toggle");
+        const menu = document.querySelector(".menu");
+        const items = document.querySelectorAll(".item");
+
+        /* Toggle mobile menu */
+        function toggleMenu() {
+            if (menu.classList.contains("active")) {
+                menu.classList.remove("active");
+                toggle.querySelector("a").innerHTML = "<i class='fas fa-bars'></i>";
+            } else {
+                menu.classList.add("active");
+                toggle.querySelector("a").innerHTML = "<i class='fas fa-times'></i>";
+            }
+        }
+
+        /* Activate Submenu */
+        function toggleItem() {
+            if (this.classList.contains("submenu-active")) {
+                this.classList.remove("submenu-active");
+            } else if (menu.querySelector(".submenu-active")) {
+                menu.querySelector(".submenu-active").classList.remove("submenu-active");
+                this.classList.add("submenu-active");
+            } else {
+                this.classList.add("submenu-active");
+            }
+        }
+
+        /* Close Submenu From Anywhere */
+        function closeSubmenu(e) {
+            if (menu.querySelector(".submenu-active")) {
+                let isClickInside = menu
+                    .querySelector(".submenu-active")
+                    .contains(e.target);
+
+                if (!isClickInside && menu.querySelector(".submenu-active")) {
+                    menu.querySelector(".submenu-active").classList.remove("submenu-active");
+                }
+            }
+        }
+        /* Event Listeners */
+        toggle.addEventListener("click", toggleMenu, false);
+        for (let item of items) {
+            if (item.querySelector(".submenu")) {
+                item.addEventListener("click", toggleItem, false);
+            }
+            item.addEventListener("keypress", toggleItem, false);
+        }
+        document.addEventListener("click", closeSubmenu, false);
+    </script>
+
+</body>
+
+</html>

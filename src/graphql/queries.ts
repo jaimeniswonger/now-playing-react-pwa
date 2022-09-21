@@ -9,6 +9,7 @@ export const NOW_PLAYING = gql`
 				posterPath
 			}
 			voteAverage
+			releaseDate
 		}
 	}
 `;
@@ -19,11 +20,24 @@ export const MOVIE_DETAIL = gql`
 	    id
 	    title
 	    overview
+		releaseDate
+		runtime
+    	productionCountries
+    	genres
+		tagline
 		images {
 			posterPath
 			backdropPathW1280
 		}
 		voteAverage
+		credits {
+			cast {
+				id
+				name
+				character
+				profilePath
+			}
+		}
 	  }
 	}
 `;

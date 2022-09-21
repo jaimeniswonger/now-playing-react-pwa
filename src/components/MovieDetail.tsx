@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { MOVIE_DETAIL } from '../graphql/queries';
-import { Movie } from '../model';
+import { CastMember, Movie } from '../model';
+import moment from 'moment';
+import CastMemberPoster from './CastMemberPoster';
+import { BackButton } from './BackButton';
+import ScrollToTop from './ScrollToTop';
 
 import './MovieDetail.css';
 
@@ -25,16 +29,41 @@ function MovieDetail() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error : {error}</p>;
 
+    const releaseDate = movie?.releaseDate ? moment(new Date(movie?.releaseDate)).format('MMM DD, yyyy') : undefined;
+    const productionCountries = movie?.productionCountries.map(country => country).join(', ');
+    const genres = movie?.genres.map(country => country).join(', ');
+    const runtimeDuration = movie?.runtime ? moment.duration(movie?.runtime, 'minutes') : undefined;
 
     return (
         <>
-            <h3>Movie Detail</h3>
-            <div>{movie?.id}</div>
-            <div>{movie?.title}</div>
-            <div>{movie?.overview}</div>
-            <div>{movie?.voteAverage}</div>
-            <img src={movie?.images.posterPath} alt="{movie?.title}" />
-            <img src={movie?.images.backdropPathW1280} alt="{movie?.title}" />
+            <ScrollToTop />
+            {/* <div>{movie?.voteAverage && Math.round(movie?.voteAverage * 10)}%</div> */}
+            <div className="featureBody">
+                <div className="featureRow">
+                    <div className="imgBox">
+                        <img src={movie?.images.posterPath} alt={movie?.title} />
+                    </div>
+
+                    <div className="details">
+                        <h2>{movie?.title}</h2>
+                        <p>{releaseDate} ({productionCountries}) - {genres} - {runtimeDuration?.hours()}h {runtimeDuration?.minutes()}m</p>
+                        <p>{movie?.tagline}</p>
+                        <h5>Overview</h5>
+                        <p>{movie?.overview}</p>
+                    </div>
+
+                </div>
+                <hr className="hr" />
+
+                <div className="cast">
+                    <h5>Top Billed Cast</h5>
+                    {movie?.credits.cast.map((castMember: CastMember) => (
+                        <CastMemberPoster key={castMember.id} castMember={castMember} />
+                    ))}
+                </div>
+
+                <BackButton />
+            </div>
         </>
     );
 }

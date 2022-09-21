@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Movie } from '../model';
 
@@ -9,10 +10,16 @@ interface MoviePosterProps {
 
 function MoviePoster({ movie }: MoviePosterProps) {
 
+    const releaseDate = movie?.releaseDate ? moment(new Date(movie?.releaseDate)).format('MMM DD, yyyy') : undefined;
+
     return (
-        <Link to={`/movies/${movie.id}`} className="movie-poster">
-            <img src={movie.images.posterPath} alt={movie.title} />
-        </Link>
+        <div className="card">
+            <Link to={`/movies/${movie.id}`}>
+                <img src={movie.images.posterPath} alt={movie.title} />
+                <h6>{movie.title}</h6>
+                <p>{releaseDate}</p>
+            </Link>
+        </div>
     );
 }
 

@@ -308,34 +308,30 @@ input[type=search] {
 
 .homeBody,
 .featureBody {
-    margin-top: 40px
-}
-
-.homeBody .row,
-.featureBody .row {
+    margin-top: 40px;
     display: flex;
-    justify-content: space-between
+    flex-wrap: wrap
 }
 
-.homeBody .row .card,
-.featureBody .row .card {
-    margin-bottom: 30px
+.homeBody .card,
+.featureBody .card {
+    margin: 0 10px 30px 10px
 }
 
-.homeBody .row .card a,
-.featureBody .row .card a {
+.homeBody .card a,
+.featureBody .card a {
     color: #000
 }
 
-.homeBody .row .card h6,
-.featureBody .row .card h6 {
+.homeBody .card h6,
+.featureBody .card h6 {
     font-weight: 500;
     font-size: .875rem;
     padding: 0 0 3px 0
 }
 
-.homeBody .row .card p,
-.featureBody .row .card p {
+.homeBody .card p,
+.featureBody .card p {
     font-size: .875rem
 }
 
@@ -375,37 +371,43 @@ input[type=search] {
     margin-bottom: 10px
 }
 
-.featureBody .cast h5 {
-    padding: 30px 0;
-    font-size: 1.15rem;
-    font-weight: 500
+.featureBody .cast {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap
 }
 
-.featureBody .cast .castRow .castCard {
-    display: inline-block;
+.featureBody .cast h5 {
+    padding: 0 0 30px 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    width: 100%
+}
+
+.featureBody .cast .castCard {
     width: 14.65%;
-    margin-bottom: 20px;
     margin: 0 10px 20px 10px
 }
 
-.featureBody .cast .castRow .castCard img {
+.featureBody .cast .castCard img {
     width: 100%;
     height: auto
 }
 
-.featureBody .cast .castRow .castCard h6,
-.featureBody .cast .castRow .castCard p {
+.featureBody .cast .castCard h6,
+.featureBody .cast .castCard p {
     color: #000;
     margin-bottom: 5px
 }
 
-.featureBody .cast .castRow .castCard h6 {
+.featureBody .cast .castCard h6 {
     font-weight: 500
 }
 
 hr.hr {
     border-top: 1px solid #ccc;
-    margin: 40px 0 30px 0
+    margin: 40px auto 0px auto;
+    width: 95%
 }
 
 @media only screen and (max-width: 600px) {
@@ -423,28 +425,24 @@ hr.hr {
         padding: 0 10px
     }
 
-    .homeBody .row {
-        display: block
-    }
-
-    .homeBody .row .card {
+    .homeBody .card {
         width: 100%
     }
 
-    .homeBody .row .card a {
+    .homeBody .card a {
         color: #000
     }
 
-    .homeBody .row .card img {
+    .homeBody .card img {
         width: 100%;
         height: auto
     }
 
-    .homeBody .row .card h6 {
+    .homeBody .card h6 {
         font-size: 1rem
     }
 
-    .homeBody .row .card p {
+    .homeBody .card p {
         font-size: 1rem
     }
 
@@ -467,7 +465,7 @@ hr.hr {
         width: 100%
     }
 
-    .featureBody .cast .castRow .castCard {
+    .featureBody .cast .castCard {
         display: inline-block;
         width: 44%
     }
